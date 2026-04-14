@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity Simulator | Pumping Lemma</title>
+    <meta name="description" content="Interactive Pumping Lemma string simulation — watch the gravity field destabilise in real time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/index.css">
+    <style>
+        body { overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <div class="cursor" id="cursor"></div>
+
+    <!-- NAV -->
+    <nav class="sim-nav">
+        <div class="nav-logo">AG — CORE</div>
+        <div class="nav-links" style="display:flex;gap:2rem;list-style:none;">
+            <a href="index.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">← THEORY</a>
+            <span style="font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--accent);text-transform:uppercase;">SIMULATOR</span>
+        </div>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="sim-layout">
+
+        <!-- ─── LEFT PANEL ─── -->
+        <aside class="sim-panel">
+            <h2>Simulation<br><em>Parameters</em></h2>
+
+            <div>
+                <label class="ctrl-label">Target Language (L)</label>
+                <select id="lang-select" class="ctrl-select">
+                    <option value="balanced">L₁ = { Pⁿ Dⁿ | n≥0 }  (Balanced)</option>
+                    <option value="double">  L₂ = { Pⁿ D²ⁿ | n≥0 } (Double Drop)</option>
+                    <option value="triple">  L₃ = { P²ⁿ Dⁿ | n≥0 } (Double Power)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="ctrl-label">Pumping Length (p)</label>
+                <div class="ctrl-val" id="val-p">4</div>
+                <input type="range" id="range-p" class="ctrl-range" min="2" max="8" value="4">
+            </div>
+
+            <!-- Partition display -->
+            <div>
+                <label class="ctrl-label">String Partition  s = xyz</label>
+                <div class="partition-display">
+                    <div class="part-row">
+                        <span class="part-key">X (prefix)</span>
+                        <span class="part-val x" id="part-x">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">Y (loop ×n)</span>
+                        <span class="part-val y" id="part-y">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">Z (suffix)</span>
+                        <span class="part-val z" id="part-z">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="ctrl-label">Pump Count (n)</label>
+                <div class="ctrl-val" id="val-n">1</div>
+                <div class="pump-btns">
+                    <button class="btn-pump btn-up" id="btn-up">PUMP +</button>
+                    <button class="btn-pump btn-dn" id="btn-dn">PUMP −</button>
+                </div>
+            </div>
+
+            <p class="sim-hint">Pumping "Y" repeats the loop segment. Watch the P/D balance break — proving this language can't be recognised by a finite state machine.</p>
+        </aside>
+
+        <!-- ─── SIMULATION STAGE ─── -->
+        <div class="sim-stage">
+            <!-- BG particles -->
+            <canvas id="sim-bg-canvas"></canvas>
+
+            <!-- n ghost number -->
+            <div class="n-badge">n = <span id="n-ghost">1</span></div>
+
+            <!-- Title -->
+            <div class="sim-title-area">
+                <h1 id="lang-title">Antigravity Frequency Field</h1>
+                <p id="lang-desc">L₁: For every Power pulse (P) there must be exactly one Drop pulse (D).</p>
+            </div>
+
+            <!-- Partition labels -->
+            <div class="partition-labels">
+                <span class="p-label lx">X — PREFIX</span>
+                <span class="p-label ly">Y — PUMPABLE LOOP</span>
+                <span class="p-label lz">Z — SUFFIX</span>
+            </div>
+
+            <!-- String tokens -->
+            <div class="string-wrap" id="string-wrap"></div>
+
+            <!-- Status -->
+            <div class="status-board">
+                <div class="status-indicator stable" id="status-title">GRAVITY FIELD: STABLE</div>
+                <p class="status-detail" id="status-detail">P Count matches D Count. Sequence accepted.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CDN: GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="./src/sim.js" defer></script>
+</body>
+</html>
