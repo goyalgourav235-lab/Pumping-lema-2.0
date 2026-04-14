@@ -1,0 +1,21 @@
+{
+  "name": "pumping-lemma-antigravity",
+  "version": "2.0.0",
+  "description": "Pumping Lemma — The Antigravity Frequency | Oryzo-inspired 3D site",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "gsap": "^3.12.5",
+    "three": "^0.163.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
+    "vite": "^5.2.0"
+  }
+}
