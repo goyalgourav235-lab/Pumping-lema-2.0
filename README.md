@@ -2,7 +2,7 @@
 
 **A beginner-friendly deep-dive into why some languages break machines.**
 
-[**Live Demo** →](https://v0-deploy-project-gamma.vercel.app/index.html)
+[**Live Demo** →](https://goyalgourav235-lab.github.io/Pumping-lema-2.0/)
 
 ---
 
