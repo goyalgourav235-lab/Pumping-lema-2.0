@@ -20,7 +20,7 @@
 
     <!-- NAV -->
     <nav class="sim-nav">
-        <div class="nav-logo">AG — CFL</div>
+        <div class="nav-logo">PL — CFL</div>
         <div class="nav-links" style="display:flex;gap:2rem;list-style:none;">
             <a href="index.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">← THEORY</a>
             <a href="simulator.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">RL SIM</a>
@@ -87,6 +87,15 @@
                 </div>
             </div>
 
+            <!-- Live Insight Card -->
+            <div class="insight-card cfl-insight-card" id="cfl-insight-card">
+                <div class="insight-header">
+                    <span class="insight-icon">💡</span>
+                    <span class="insight-label">LIVE INSIGHT</span>
+                </div>
+                <p class="insight-text" id="cfl-insight-text">At n=1, the string is in its original form. Both v and y are pumped simultaneously. Try pumping to break the balance.</p>
+            </div>
+
             <p class="sim-hint">In CFL pumping, <strong>v</strong> and <strong>y</strong> are pumped <em>simultaneously</em>. They must straddle the parse tree's repeated variable. Watch the language rule break as pumping disrupts the balance.</p>
         </aside>
 
@@ -100,8 +109,46 @@
 
             <!-- Title -->
             <div class="sim-title-area">
-                <h1 id="cfl-lang-title">Parse Tree Resonance Field</h1>
-                <p id="cfl-lang-desc">L₁: Equal counts of a, b, and c in sequence. String: aⁿbⁿcⁿ</p>
+                <h1 id="cfl-lang-title">Triple Balance Language</h1>
+                <p id="cfl-lang-desc">L₁ = { aⁿbⁿcⁿ | n ≥ 1 } — Equal counts of a, b, and c in sequence.</p>
+            </div>
+
+            <!-- Live Formula Bar -->
+            <div class="formula-bar cfl-formula-bar" id="cfl-formula-bar">
+                <span class="formula-label">PUMPED STRING</span>
+                <span class="formula-expr" id="cfl-formula-expr">s = u · v¹ · x · y¹ · z</span>
+            </div>
+
+            <!-- Real-time Analytics Strip -->
+            <div class="analytics-strip cfl-analytics-strip" id="cfl-analytics-strip">
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-1-label">a COUNT</span>
+                    <span class="analytic-value" id="cfl-stat-1-value">3</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-2-label">b COUNT</span>
+                    <span class="analytic-value" id="cfl-stat-2-value">3</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-3-label">c COUNT</span>
+                    <span class="analytic-value" id="cfl-stat-3-value">3</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-4-label">LENGTH</span>
+                    <span class="analytic-value" id="cfl-stat-4-value">9</span>
+                </div>
+            </div>
+
+            <!-- Constraint Checker -->
+            <div class="constraint-strip cfl-constraint-strip" id="cfl-constraint-strip">
+                <div class="constraint-item constraint-pass" id="cfl-constraint-vxy">
+                    <span class="constraint-check">✓</span>
+                    <span>|vxy| = <span id="cfl-vxy-val">2</span> ≤ p = <span id="cfl-vxy-p">3</span></span>
+                </div>
+                <div class="constraint-item constraint-pass" id="cfl-constraint-vy">
+                    <span class="constraint-check">✓</span>
+                    <span>|vy| = <span id="cfl-vy-val">2</span> &gt; 0</span>
+                </div>
             </div>
 
             <!-- Parse Tree Visualisation -->
@@ -123,8 +170,9 @@
 
             <!-- Status -->
             <div class="status-board cfl-status-board">
-                <div class="status-indicator stable" id="cfl-status-title">PARSE TREE: STABLE</div>
+                <div class="status-indicator stable" id="cfl-status-title">LANGUAGE TEST: ACCEPTED ✓</div>
                 <p class="status-detail" id="cfl-status-detail">All symbol counts satisfy the language rule. Accepted.</p>
+                <div class="status-formula" id="cfl-status-formula"></div>
             </div>
         </div>
 

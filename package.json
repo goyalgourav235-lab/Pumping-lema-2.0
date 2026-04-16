@@ -1,7 +1,7 @@
 {
-  "name": "pumping-lemma-antigravity",
-  "version": "2.0.0",
-  "description": "Pumping Lemma — The Antigravity Frequency | Oryzo-inspired 3D site",
+  "name": "pumping-lemma-simulator",
+  "version": "2.1.0",
+  "description": "Pumping Lemma — Interactive Theory of Computation Simulator",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

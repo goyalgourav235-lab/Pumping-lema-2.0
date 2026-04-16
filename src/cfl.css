@@ -465,6 +465,41 @@
 .cfl-panel .ctrl-range { accent-color: var(--cfl-accent); }
 
 /* ════════════════════════════════════════════
+   CFL SIMULATOR ENHANCEMENTS
+════════════════════════════════════════════ */
+
+/* CFL Formula Bar override */
+.cfl-formula-bar {
+    background: rgba(167,139,250,0.03);
+    border-color: rgba(167,139,250,0.12);
+}
+.cfl-formula-bar:hover { border-color: rgba(167,139,250,0.3); }
+.cfl-formula-bar .formula-result { color: var(--cfl-accent); }
+
+/* CFL Analytics override */
+.cfl-analytics-strip .analytic-alert .analytic-value {
+    color: var(--cfl-accent3);
+}
+
+/* CFL Constraint override */
+.cfl-constraint-strip .constraint-pass .constraint-check { color: var(--cfl-accent2); }
+.cfl-constraint-strip .constraint-pass { border-color: rgba(34,211,238,0.2); }
+.cfl-constraint-strip .constraint-fail .constraint-check { color: var(--cfl-accent3); }
+.cfl-constraint-strip .constraint-fail { border-color: rgba(244,114,182,0.3); background: rgba(244,114,182,0.05); }
+
+/* CFL Insight Card override */
+.cfl-insight-card {
+    background: rgba(167,139,250,0.03);
+    border-color: rgba(167,139,250,0.12);
+}
+.cfl-insight-card .insight-label { color: var(--cfl-accent); }
+
+/* CFL Status Formula override */
+.cfl-status-board .sf-accepted { color: var(--cfl-accent2); }
+.cfl-status-board .sf-rejected { color: var(--cfl-accent3); }
+.cfl-status-board .sf-rejected em { color: var(--cfl-accent); }
+
+/* ════════════════════════════════════════════
    RESPONSIVE CFL
 ════════════════════════════════════════════ */
 @media (max-width: 900px) {

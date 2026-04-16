@@ -695,8 +695,8 @@ footer div {
     border: 1px solid transparent;
     transition: all 0.2s;
 }
-.token.P { background: rgba(200,242,58,0.1); border-color: rgba(200,242,58,0.4); color: var(--accent); }
-.token.D { background: rgba(255,61,61,0.1); border-color: rgba(255,61,61,0.4); color: var(--accent2); }
+.token.a { background: rgba(200,242,58,0.1); border-color: rgba(200,242,58,0.4); color: var(--accent); text-shadow: 0 0 8px rgba(200,242,58,0.2); }
+.token.b { background: rgba(255,61,61,0.1); border-color: rgba(255,61,61,0.4); color: var(--accent2); text-shadow: 0 0 8px rgba(255,61,61,0.2); }
 .token.y-pump {
     box-shadow: 0 0 12px rgba(200,242,58,0.6);
     border-color: var(--accent);
@@ -769,6 +769,182 @@ footer div {
     color: rgba(200,242,58,0.12);
     line-height: 1;
 }
+
+/* ════════════════════════════════════════════
+   SIMULATOR ENHANCEMENTS
+   Formula bar, analytics, constraints, insights
+════════════════════════════════════════════ */
+
+/* ── FORMULA BAR ── */
+.formula-bar {
+    position: relative; z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(200,242,58,0.03);
+    border: 1px solid rgba(200,242,58,0.12);
+    border-radius: 12px;
+    padding: 0.7rem 1.4rem;
+    margin-bottom: 1rem;
+    max-width: 700px;
+    width: 100%;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s;
+    overflow: hidden;
+}
+.formula-bar:hover { border-color: rgba(200,242,58,0.3); }
+
+.formula-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.formula-expr {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.formula-result { color: var(--accent); }
+.formula-len { color: var(--muted); font-size: 0.7rem; }
+
+/* ── ANALYTICS STRIP ── */
+.analytics-strip {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 700px;
+    width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+.analytic-cell {
+    background: var(--bg2);
+    padding: 0.8rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    transition: background 0.3s;
+}
+.analytic-cell:hover { background: #1a1a1a; }
+
+.analytic-label {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.analytic-value {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--text);
+    line-height: 1;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.analytic-alert .analytic-value {
+    color: var(--accent2);
+    animation: pulse-alert 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-alert {
+    0%   { transform: scale(1); }
+    100% { transform: scale(1.05); }
+}
+
+/* ── CONSTRAINT STRIP ── */
+.constraint-strip {
+    position: relative; z-index: 1;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 0.8rem;
+    max-width: 700px;
+    flex-wrap: wrap;
+}
+
+.constraint-item {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    transition: all 0.3s;
+}
+
+.constraint-check {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.constraint-pass .constraint-check { color: var(--accent); }
+.constraint-fail .constraint-check { color: var(--accent2); }
+.constraint-pass { border-color: rgba(200,242,58,0.2); }
+.constraint-fail { border-color: rgba(255,61,61,0.3); background: rgba(255,61,61,0.05); }
+
+/* ── INSIGHT CARD ── */
+.insight-card {
+    background: rgba(200,242,58,0.03);
+    border: 1px solid rgba(200,242,58,0.12);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: border-color 0.4s;
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.insight-icon { font-size: 0.9rem; }
+
+.insight-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.insight-text {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ── STATUS FORMULA LINE ── */
+.status-formula {
+    margin-top: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+}
+.sf-accepted { color: var(--accent); }
+.sf-rejected { color: var(--accent2); }
+.sf-rejected em { color: #ff7043; font-style: italic; }
 
 /* ════════════════════════════════════════════
    RESPONSIVE
