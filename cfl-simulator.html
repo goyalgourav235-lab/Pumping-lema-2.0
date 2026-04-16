@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFL Simulator | Pumping Lemma for Context-Free Languages</title>
+    <meta name="description" content="Interactive Pumping Lemma simulator for Context-Free Languages — watch the parse tree collapse in real time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { overflow: hidden; }
+    </style>
+  <link rel="stylesheet" crossorigin href="./assets/index-DnF5XCRs.css">
+  <link rel="stylesheet" crossorigin href="./assets/cfl-XEx5fWN_.css">
+</head>
+<body>
+
+    <div class="cursor" id="cursor"></div>
+
+    <!-- NAV -->
+    <nav class="sim-nav">
+        <div class="nav-logo">PL — CFL</div>
+        <div class="nav-links" style="display:flex;gap:2rem;list-style:none;">
+            <a href="index.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">← THEORY</a>
+            <a href="simulator.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">RL SIM</a>
+            <span style="font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--cfl-accent);text-transform:uppercase;">CFL SIMULATOR</span>
+        </div>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="sim-layout cfl-layout">
+
+        <!-- ─── LEFT PANEL ─── -->
+        <aside class="sim-panel cfl-panel">
+            <h2>CFL<br><em>Simulation</em></h2>
+
+            <div>
+                <label class="ctrl-label">Target Language (L)</label>
+                <select id="cfl-lang-select" class="ctrl-select">
+                    <option value="anbncn">L₁ = { aⁿbⁿcⁿ | n≥1 }  (Triple Balance)</option>
+                    <option value="ww">L₂ = { ww | w ∈ {a,b}* }  (Exact Copy)</option>
+                    <option value="anbncndn">L₃ = { aⁿbⁿcⁿdⁿ | n≥1 }  (Quad Balance)</option>
+                    <option value="a2n">L₄ = { a^(n²) | n≥1 }  (Perfect Square)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="ctrl-label">Pumping Length (p)</label>
+                <div class="ctrl-val" id="cfl-val-p">3</div>
+                <input type="range" id="cfl-range-p" class="ctrl-range" min="2" max="6" value="3">
+            </div>
+
+            <!-- 5-part Partition display -->
+            <div>
+                <label class="ctrl-label">String Partition  s = uvxyz</label>
+                <div class="partition-display cfl-partition-display">
+                    <div class="part-row">
+                        <span class="part-key">U (prefix)</span>
+                        <span class="part-val cfl-u" id="cfl-part-u">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">V (pump 1 ×n)</span>
+                        <span class="part-val cfl-v" id="cfl-part-v">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">X (center)</span>
+                        <span class="part-val cfl-x" id="cfl-part-x">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">Y (pump 2 ×n)</span>
+                        <span class="part-val cfl-y" id="cfl-part-y">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">Z (suffix)</span>
+                        <span class="part-val cfl-z" id="cfl-part-z">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="ctrl-label">Pump Count (n)</label>
+                <div class="ctrl-val" id="cfl-val-n">1</div>
+                <div class="pump-btns">
+                    <button class="btn-pump btn-up cfl-btn-up" id="cfl-btn-up">PUMP +</button>
+                    <button class="btn-pump btn-dn" id="cfl-btn-dn">PUMP −</button>
+                </div>
+            </div>
+
+            <!-- Live Insight Card -->
+            <div class="insight-card cfl-insight-card" id="cfl-insight-card">
+                <div class="insight-header">
+                    <span class="insight-icon">💡</span>
+                    <span class="insight-label">LIVE INSIGHT</span>
+                </div>
+                <p class="insight-text" id="cfl-insight-text">At n=1, the string is in its original form. Both v and y are pumped simultaneously. Try pumping to break the balance.</p>
+            </div>
+
+            <p class="sim-hint">In CFL pumping, <strong>v</strong> and <strong>y</strong> are pumped <em>simultaneously</em>. They must straddle the parse tree's repeated variable. Watch the language rule break as pumping disrupts the balance.</p>
+        </aside>
+
+        <!-- ─── SIMULATION STAGE ─── -->
+        <div class="sim-stage cfl-stage">
+            <!-- BG particles -->
+            <canvas id="cfl-bg-canvas"></canvas>
+
+            <!-- n ghost number -->
+            <div class="n-badge cfl-n-badge">n = <span id="cfl-n-ghost">1</span></div>
+
+            <!-- Title -->
+            <div class="sim-title-area">
+                <h1 id="cfl-lang-title">Triple Balance Language</h1>
+                <p id="cfl-lang-desc">L₁ = { aⁿbⁿcⁿ | n ≥ 1 } — Equal counts of a, b, and c in sequence.</p>
+            </div>
+
+            <!-- Live Formula Bar -->
+            <div class="formula-bar cfl-formula-bar" id="cfl-formula-bar">
+                <span class="formula-label">PUMPED STRING</span>
+                <span class="formula-expr" id="cfl-formula-expr">s = u · v¹ · x · y¹ · z</span>
+            </div>
+
+            <!-- Real-time Analytics Strip -->
+            <div class="analytics-strip cfl-analytics-strip" id="cfl-analytics-strip">
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-1-label">a COUNT</span>
+                    <span class="analytic-value" id="cfl-stat-1-value">3</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-2-label">b COUNT</span>
+                    <span class="analytic-value" id="cfl-stat-2-value">3</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-3-label">c COUNT</span>
+                    <span class="analytic-value" id="cfl-stat-3-value">3</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label" id="cfl-stat-4-label">LENGTH</span>
+                    <span class="analytic-value" id="cfl-stat-4-value">9</span>
+                </div>
+            </div>
+
+            <!-- Constraint Checker -->
+            <div class="constraint-strip cfl-constraint-strip" id="cfl-constraint-strip">
+                <div class="constraint-item constraint-pass" id="cfl-constraint-vxy">
+                    <span class="constraint-check">✓</span>
+                    <span>|vxy| = <span id="cfl-vxy-val">2</span> ≤ p = <span id="cfl-vxy-p">3</span></span>
+                </div>
+                <div class="constraint-item constraint-pass" id="cfl-constraint-vy">
+                    <span class="constraint-check">✓</span>
+                    <span>|vy| = <span id="cfl-vy-val">2</span> &gt; 0</span>
+                </div>
+            </div>
+
+            <!-- Parse Tree Visualisation -->
+            <div class="cfl-tree-wrap" id="cfl-tree-wrap">
+                <canvas id="cfl-tree-canvas"></canvas>
+            </div>
+
+            <!-- Partition labels -->
+            <div class="partition-labels cfl-partition-labels">
+                <span class="p-label cfl-lu">U — PREFIX</span>
+                <span class="p-label cfl-lv">V — PUMP₁</span>
+                <span class="p-label cfl-lx">X — CENTER</span>
+                <span class="p-label cfl-ly">Y — PUMP₂</span>
+                <span class="p-label cfl-lz">Z — SUFFIX</span>
+            </div>
+
+            <!-- String tokens -->
+            <div class="string-wrap cfl-string-wrap" id="cfl-string-wrap"></div>
+
+            <!-- Status -->
+            <div class="status-board cfl-status-board">
+                <div class="status-indicator stable" id="cfl-status-title">LANGUAGE TEST: ACCEPTED ✓</div>
+                <p class="status-detail" id="cfl-status-detail">All symbol counts satisfy the language rule. Accepted.</p>
+                <div class="status-formula" id="cfl-status-formula"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CDN: GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="./src/cfl-sim.js" defer></script>
+</body>
+</html>

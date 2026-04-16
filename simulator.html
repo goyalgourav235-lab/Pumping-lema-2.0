@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL Simulator | Pumping Lemma for Regular Languages</title>
+    <meta name="description" content="Interactive Pumping Lemma simulator for Regular Languages — visualize string pumping and language membership testing in real time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { overflow: hidden; }
+    </style>
+  <link rel="stylesheet" crossorigin href="./assets/index-DnF5XCRs.css">
+</head>
+<body>
+
+    <div class="cursor" id="cursor"></div>
+
+    <!-- NAV -->
+    <nav class="sim-nav">
+        <div class="nav-logo">PL — RL</div>
+        <div class="nav-links" style="display:flex;gap:2rem;list-style:none;">
+            <a href="index.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">← THEORY</a>
+            <span style="font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--accent);text-transform:uppercase;">RL SIMULATOR</span>
+            <a href="cfl-simulator.html" style="text-decoration:none;font-size:0.8rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-family:var(--font-mono);">CFL SIM →</a>
+        </div>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="sim-layout">
+
+        <!-- ─── LEFT PANEL ─── -->
+        <aside class="sim-panel">
+            <h2>Simulation<br><em>Parameters</em></h2>
+
+            <div>
+                <label class="ctrl-label">Target Language (L)</label>
+                <select id="lang-select" class="ctrl-select">
+                    <option value="balanced">L₁ = { aⁿbⁿ | n≥0 }  (Balanced)</option>
+                    <option value="double">  L₂ = { aⁿb²ⁿ | n≥0 } (Double Ratio)</option>
+                    <option value="triple">  L₃ = { a²ⁿbⁿ | n≥0 } (Double Power)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="ctrl-label">Pumping Length (p)</label>
+                <div class="ctrl-val" id="val-p">4</div>
+                <input type="range" id="range-p" class="ctrl-range" min="2" max="8" value="4">
+            </div>
+
+            <!-- Partition display -->
+            <div>
+                <label class="ctrl-label">String Partition  s = xyz</label>
+                <div class="partition-display">
+                    <div class="part-row">
+                        <span class="part-key">X (prefix)</span>
+                        <span class="part-val x" id="part-x">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">Y (loop ×n)</span>
+                        <span class="part-val y" id="part-y">—</span>
+                    </div>
+                    <div class="part-row">
+                        <span class="part-key">Z (suffix)</span>
+                        <span class="part-val z" id="part-z">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="ctrl-label">Pump Count (n)</label>
+                <div class="ctrl-val" id="val-n">1</div>
+                <div class="pump-btns">
+                    <button class="btn-pump btn-up" id="btn-up">PUMP +</button>
+                    <button class="btn-pump btn-dn" id="btn-dn">PUMP −</button>
+                </div>
+            </div>
+
+            <!-- Live Insight Card -->
+            <div class="insight-card" id="insight-card">
+                <div class="insight-header">
+                    <span class="insight-icon">💡</span>
+                    <span class="insight-label">LIVE INSIGHT</span>
+                </div>
+                <p class="insight-text" id="insight-text">At n=1, the string is in its original form. Try pumping to see if the language rule survives.</p>
+            </div>
+
+            <p class="sim-hint">Pumping "Y" repeats the loop segment. Watch the a/b balance break — proving this language can't be recognised by any finite state machine.</p>
+        </aside>
+
+        <!-- ─── SIMULATION STAGE ─── -->
+        <div class="sim-stage">
+            <!-- BG particles -->
+            <canvas id="sim-bg-canvas"></canvas>
+
+            <!-- n ghost number -->
+            <div class="n-badge">n = <span id="n-ghost">1</span></div>
+
+            <!-- Title -->
+            <div class="sim-title-area">
+                <h1 id="lang-title">Balanced Pair Language</h1>
+                <p id="lang-desc">L₁ = { aⁿbⁿ | n ≥ 0 } — For every 'a' there must be exactly one 'b'.</p>
+            </div>
+
+            <!-- Live Formula Bar -->
+            <div class="formula-bar" id="formula-bar">
+                <span class="formula-label">PUMPED STRING</span>
+                <span class="formula-expr" id="formula-expr">s = x · y¹ · z</span>
+            </div>
+
+            <!-- Real-time Analytics Strip -->
+            <div class="analytics-strip" id="analytics-strip">
+                <div class="analytic-cell" id="cell-a">
+                    <span class="analytic-label">a COUNT</span>
+                    <span class="analytic-value" id="count-a">4</span>
+                </div>
+                <div class="analytic-cell" id="cell-b">
+                    <span class="analytic-label">b COUNT</span>
+                    <span class="analytic-value" id="count-b">4</span>
+                </div>
+                <div class="analytic-cell">
+                    <span class="analytic-label">STRING LENGTH</span>
+                    <span class="analytic-value" id="count-len">8</span>
+                </div>
+                <div class="analytic-cell" id="cell-ratio">
+                    <span class="analytic-label">RATIO (a:b)</span>
+                    <span class="analytic-value" id="count-ratio">1:1</span>
+                </div>
+            </div>
+
+            <!-- Constraint Checker -->
+            <div class="constraint-strip" id="constraint-strip">
+                <div class="constraint-item constraint-pass" id="constraint-xy">
+                    <span class="constraint-check">✓</span>
+                    <span>|xy| = <span id="xy-val">4</span> ≤ p = <span id="xy-p">4</span></span>
+                </div>
+                <div class="constraint-item constraint-pass" id="constraint-y">
+                    <span class="constraint-check">✓</span>
+                    <span>|y| = <span id="y-val">2</span> &gt; 0</span>
+                </div>
+            </div>
+
+            <!-- Partition labels -->
+            <div class="partition-labels">
+                <span class="p-label lx">X — PREFIX</span>
+                <span class="p-label ly">Y — PUMPABLE LOOP</span>
+                <span class="p-label lz">Z — SUFFIX</span>
+            </div>
+
+            <!-- String tokens -->
+            <div class="string-wrap" id="string-wrap"></div>
+
+            <!-- Status -->
+            <div class="status-board">
+                <div class="status-indicator stable" id="status-title">LANGUAGE TEST: ACCEPTED ✓</div>
+                <p class="status-detail" id="status-detail">a Count matches b Count. Sequence accepted.</p>
+                <div class="status-formula" id="status-formula"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CDN: GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="./src/sim.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pumping Lemma | Interactive Theory of Computation</title>
+    <meta name="description" content="An interactive experience exploring the Pumping Lemma — proving language non-regularity and non-context-freeness through string pumping.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="./assets/index-DnF5XCRs.css">
+  <link rel="stylesheet" crossorigin href="./assets/cfl-XEx5fWN_.css">
+</head>
+<body>
+
+    <!-- Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Canvas BG -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- NAV -->
+    <nav id="navbar">
+        <div class="nav-logo">PL — CORE</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Intro</a></li>
+            <li><a href="#theory">RL Theory</a></li>
+            <li><a href="#proof">RL Proof</a></li>
+            <li><a href="#cfl-section">CFL Theory</a></li>
+            <li><a href="#cfl-proof">CFL Proof</a></li>
+        </ul>
+        <div style="display:flex;gap:0.8rem;align-items:center;">
+            <a href="simulator.html" class="nav-btn">RL Simulator →</a>
+            <a href="cfl-simulator.html" class="nav-btn" style="background:var(--cfl-accent);">CFL Simulator →</a>
+        </div>
+    </nav>
+
+    <!-- ─── HERO ─── -->
+    <section id="hero">
+        <div class="hero-eyebrow">THEORY OF COMPUTATION // PROTOCOL 001</div>
+        <h1 class="hero-heading">
+            <em>isn't just</em><br>
+            a formula.
+        </h1>
+        <p class="hero-tag">Powered by Finite States*</p>
+
+        <!-- 3D Scene -->
+        <div class="hero-model-wrap" id="hero-model">
+            <canvas id="three-canvas"></canvas>
+        </div>
+
+        <div class="hero-bottom">
+            <div class="hero-bottom-left">
+                <span>THE PUMPING LEMMA</span>
+                <span class="hero-sub">A beginner-friendly deep-dive into why some languages break machines.</span>
+            </div>
+            <div class="hero-scroll-hint">
+                <div class="scroll-line"></div>
+                <span>SCROLL</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── WHAT IS IT ─── -->
+    <section id="theory" class="section-what">
+        <div class="pill-tag">DEFINITION</div>
+        <h2 class="display-h2">The Core Dilemma</h2>
+        <div class="two-col">
+            <div class="two-col-left">
+                <p class="body-lg">A <strong>Finite State Automaton (FSA)</strong> has no memory. It only knows its current state. Feed it a string longer than its state count and, by the <strong>Pigeonhole Principle</strong>, it <em>must</em> revisit a state — creating a repeatable loop.</p>
+                <p class="body-lg" style="margin-top:1.5rem;">The <strong>Pumping Lemma</strong> weaponises that loop. If every string in a language can be "pumped" (its loop repeated endlessly) and still stay in the language, it <em>might</em> be regular. If we find even one string where pumping breaks it — <strong>the language is NOT regular.</strong></p>
+            </div>
+            <div class="two-col-right">
+                <div class="stat-block">
+                    <div class="stat-num">p</div>
+                    <div class="stat-label">Pumping Length — the threshold above which every string must contain a loop.</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-num">|y| &gt; 0</div>
+                    <div class="stat-label">The pumpable segment y can never be empty.</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-num">|xy| ≤ p</div>
+                    <div class="stat-label">The loop must appear within the first p characters.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FORMULA TICKER ─── -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span>S = XYZ</span><span>·</span>
+            <span>XY<sup>n</sup>Z</span><span>·</span>
+            <span>|y| &gt; 0</span><span>·</span>
+            <span>|xy| ≤ p</span><span>·</span>
+            <span>n ≥ 0</span><span>·</span>
+            <span>NOT REGULAR</span><span>·</span>
+            <span>S = XYZ</span><span>·</span>
+            <span>XY<sup>n</sup>Z</span><span>·</span>
+            <span>|y| &gt; 0</span><span>·</span>
+            <span>|xy| ≤ p</span><span>·</span>
+            <span>n ≥ 0</span><span>·</span>
+            <span>NOT REGULAR</span><span>·</span>
+        </div>
+    </div>
+
+    <!-- ─── FORMULA BREAKDOWN ─── -->
+    <section class="section-formula">
+        <div class="pill-tag">S = XYZ</div>
+        <h2 class="display-h2">Deconstructing<br><em>the string</em></h2>
+        <div class="formula-grid">
+            <div class="fx-card" id="fxc-1">
+                <div class="fx-index">01</div>
+                <div class="fx-title">X — The Prefix</div>
+                <div class="fx-body">The part before the loop. The FSA processes x as it advances through initial states toward the repeated cycle.</div>
+                <div class="fx-math">S = <span class="hl-x">X</span>YZ</div>
+            </div>
+            <div class="fx-card" id="fxc-2">
+                <div class="fx-index">02</div>
+                <div class="fx-title">Y — The Loop</div>
+                <div class="fx-body">The pumpable segment. Because the automaton returns to the same state, this portion can repeat 0, 1, 2... infinite times.</div>
+                <div class="fx-math">S = X<span class="hl-y">Y<sup>n</sup></span>Z</div>
+            </div>
+            <div class="fx-card" id="fxc-3">
+                <div class="fx-index">03</div>
+                <div class="fx-title">Z — The Suffix</div>
+                <div class="fx-body">Everything after the loop. It carries the balance of the string. Pump y, and z stays fixed — breaking the pattern.</div>
+                <div class="fx-math">S = XY<span class="hl-z">Z</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PROOF SECTION ─── -->
+    <section id="proof" class="section-proof">
+        <div class="proof-left">
+            <div class="pill-tag">FORMAL PROOF</div>
+            <h2 class="display-h2">The<br><em>Enemy Game</em></h2>
+            <p class="body-lg">A proof by contradiction. You vs. a hypothetical FSM that claims it can recognise a non-regular language.</p>
+        </div>
+        <div class="proof-steps">
+            <div class="step">
+                <div class="step-num">①</div>
+                <div class="step-content">
+                    <div class="step-actor enemy">ENEMY speaks</div>
+                    <p>Assumes the language is regular. Provides you with a pumping length <em>p</em>.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">②</div>
+                <div class="step-content">
+                    <div class="step-actor you">YOU respond</div>
+                    <p>Carefully choose a string <code>s ∈ L</code> with <code>|s| ≥ p</code>. Classic choice: <code>aᵖbᵖ</code>.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">③</div>
+                <div class="step-content">
+                    <div class="step-actor enemy">ENEMY speaks</div>
+                    <p>Partitions <code>s = xyz</code> adhering strictly to <code>|y|&gt;0</code> and <code>|xy|≤p</code>. The y must fall in the <code>aᵖ</code> region.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">④</div>
+                <div class="step-content">
+                    <div class="step-actor you">YOU win</div>
+                    <p>Pump to <code>n = 2</code>. The result <code>aᵖ⁺ᵏbᵖ</code> has more a's than b's. It's <strong>NOT in the language</strong>. Contradiction. Q.E.D.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── EXAMPLE STRIP ─── -->
+    <section class="section-examples">
+        <div class="pill-tag">EXAMPLES</div>
+        <h2 class="display-h2">Who breaks<br><em>the machine?</em></h2>
+        <div class="eg-list">
+            <div class="eg-row">
+                <div class="eg-lang">L₁ = { aⁿbⁿ | n≥0 }</div>
+                <div class="eg-verdict fail">NOT REGULAR</div>
+                <div class="eg-reason">Pumping 'a' causes a&gt;b imbalance. No FSM can count arbitrarily.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₂ = { aⁿb²ⁿ | n≥0 }</div>
+                <div class="eg-verdict fail">NOT REGULAR</div>
+                <div class="eg-reason">Changing the count of a breaks the 1:2 ratio irreparably.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₃ = { (ab)ⁿ | n≥0 }</div>
+                <div class="eg-verdict pass">REGULAR</div>
+                <div class="eg-reason">The repeating unit "ab" is itself the pumpable y. No imbalance is created.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₄ = { aⁿ | n is prime }</div>
+                <div class="eg-verdict fail">NOT REGULAR</div>
+                <div class="eg-reason">Pumping changes the count to a non-prime. Primes can't be finite-state-counted.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── RL CTA ─── -->
+    <section id="cta" class="section-cta">
+        <p class="cta-overline">PUMPING LEMMA SIMULATOR</p>
+        <h2 class="cta-heading">See it<br><em>destabilise.</em></h2>
+        <a href="simulator.html" class="cta-btn">ENTER RL SIMULATOR</a>
+        <p class="cta-note">Interact with a live string-pumping visualisation of L = { PⁿDⁿ }</p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- ─── CFL PUMPING LEMMA — CONTEXT-FREE LANGUAGES ─── -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <!-- ─── CFL TICKER ─── -->
+    <div class="cfl-ticker-wrap">
+        <div class="cfl-ticker">
+            <span>S = UVXYZ</span><span>·</span>
+            <span>UV<sup>n</sup>XY<sup>n</sup>Z</span><span>·</span>
+            <span>|vy| > 0</span><span>·</span>
+            <span>|vxy| ≤ p</span><span>·</span>
+            <span>n ≥ 0</span><span>·</span>
+            <span>NOT CONTEXT-FREE</span><span>·</span>
+            <span>S = UVXYZ</span><span>·</span>
+            <span>UV<sup>n</sup>XY<sup>n</sup>Z</span><span>·</span>
+            <span>|vy| > 0</span><span>·</span>
+            <span>|vxy| ≤ p</span><span>·</span>
+            <span>n ≥ 0</span><span>·</span>
+            <span>NOT CONTEXT-FREE</span><span>·</span>
+        </div>
+    </div>
+
+    <!-- ─── CFL INTRO SECTION ─── -->
+    <section id="cfl-section" class="section-cfl">
+        <div class="cfl-pill-tag">CONTEXT-FREE LANGUAGES</div>
+        <h2 class="cfl-display-h2">Beyond<br><em>regular.</em></h2>
+
+        <div class="two-col">
+            <div class="two-col-left">
+                <p class="body-lg">Context-Free Languages (CFLs) are more powerful than regular languages — they can be recognised by <strong>Pushdown Automata</strong> (PDAs) which have a <em>stack</em> for memory. But even PDAs have limits.</p>
+                <p class="body-lg" style="margin-top:1.5rem;">The <strong>CFL Pumping Lemma</strong> splits every sufficiently long string into <em>five</em> parts: <strong>s = uvxyz</strong>. Both <strong>v</strong> and <strong>y</strong> can be pumped simultaneously. If pumping breaks the language, it <strong>cannot be context-free</strong>.</p>
+            </div>
+            <div class="two-col-right">
+                <div class="stat-block">
+                    <div class="stat-num" style="color:var(--cfl-accent)">5</div>
+                    <div class="stat-label">Parts — the string is split into u, v, x, y, z instead of the RL's three-way split.</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-num" style="color:var(--cfl-accent)">|vy| > 0</div>
+                    <div class="stat-label">At least one of the pumpable segments must be non-empty.</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-num" style="color:var(--cfl-accent)">|vxy| ≤ p</div>
+                    <div class="stat-label">The pumpable region and its center are bounded by the pumping length.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── RL vs CFL COMPARISON ─── -->
+    <section class="section-cfl" style="padding-top:5rem;">
+        <div class="cfl-pill-tag">COMPARISON</div>
+        <h2 class="cfl-display-h2">Regular vs<br><em>Context-Free</em></h2>
+        <div class="cfl-compare-grid">
+            <div class="cfl-compare-card active-rl">
+                <span class="card-tag rl-tag">REGULAR LANGUAGES</span>
+                <h3>Pumping Lemma (RL)</h3>
+                <p>Splits a string into <strong>3 parts</strong> (x, y, z). Only the single loop segment y is pumped. Used to prove a language is not regular.</p>
+                <div class="formula-highlight rl-formula">s = xyz → xy<sup>n</sup>z</div>
+            </div>
+            <div class="cfl-compare-card active-cfl">
+                <span class="card-tag cfl-tag">CONTEXT-FREE LANGUAGES</span>
+                <h3>Pumping Lemma (CFL)</h3>
+                <p>Splits a string into <strong>5 parts</strong> (u, v, x, y, z). Two segments v and y are pumped simultaneously. Used to prove a language is not context-free.</p>
+                <div class="formula-highlight cfl-formula">s = uvxyz → uv<sup>n</sup>xy<sup>n</sup>z</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CFL DECOMPOSITION CARDS ─── -->
+    <section class="section-cfl" style="padding-top:5rem;">
+        <div class="cfl-pill-tag">S = UVXYZ</div>
+        <h2 class="cfl-display-h2">The Five-Part<br><em>Decomposition</em></h2>
+        <div class="cfl-decomp-grid">
+            <div class="cfl-decomp-card">
+                <div class="part-letter">u</div>
+                <div class="part-name">PREFIX</div>
+                <div class="part-desc">The initial segment before any pumpable region. Stays fixed during pumping.</div>
+            </div>
+            <div class="cfl-decomp-card">
+                <div class="part-letter">v</div>
+                <div class="part-name">PUMP 1</div>
+                <div class="part-desc">The first pumpable segment — pumped in sync with y. Derived from the parse tree's repeated variable.</div>
+            </div>
+            <div class="cfl-decomp-card">
+                <div class="part-letter">x</div>
+                <div class="part-name">CENTER</div>
+                <div class="part-desc">The "core" between the two pumps. Generated by the deepest occurrence of the repeated variable.</div>
+            </div>
+            <div class="cfl-decomp-card">
+                <div class="part-letter">y</div>
+                <div class="part-name">PUMP 2</div>
+                <div class="part-desc">The second pumpable segment. Pumped simultaneously with v — their counts always match.</div>
+            </div>
+            <div class="cfl-decomp-card">
+                <div class="part-letter">z</div>
+                <div class="part-name">SUFFIX</div>
+                <div class="part-desc">Everything after the pumps. Remains fixed. Pumping v and y into the string distorts the overall balance.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CFL FORMAL CONDITIONS ─── -->
+    <section class="section-cfl" style="padding-top:5rem;">
+        <div class="cfl-pill-tag">FORMAL CONDITIONS</div>
+        <h2 class="cfl-display-h2">The Three<br><em>Constraints</em></h2>
+        <div class="cfl-conditions">
+            <div class="cfl-condition-row">
+                <div class="cfl-condition-num">①</div>
+                <div class="cfl-condition-formula">|vxy| ≤ p</div>
+                <div class="cfl-condition-explain">The total length of the pumpable region plus its center cannot exceed the pumping length p. This constrains where the parse tree's repeated variable appears.</div>
+            </div>
+            <div class="cfl-condition-row">
+                <div class="cfl-condition-num">②</div>
+                <div class="cfl-condition-formula">|vy| > 0</div>
+                <div class="cfl-condition-explain">At least one of v or y must be non-empty. The pump cannot be trivial — there must be actual content to repeat.</div>
+            </div>
+            <div class="cfl-condition-row">
+                <div class="cfl-condition-num">③</div>
+                <div class="cfl-condition-formula">uv<sup>i</sup>xy<sup>i</sup>z ∈ L, ∀i ≥ 0</div>
+                <div class="cfl-condition-explain">For ALL pump counts i, the resulting string must remain in the language. If any pump count produces a string outside L, the language is not context-free.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CFL PROOF SECTION ─── -->
+    <section id="cfl-proof" class="section-cfl-proof">
+        <div class="proof-left">
+            <div class="cfl-pill-tag">CFL PROOF</div>
+            <h2 class="cfl-display-h2">The Parse Tree<br><em>Adversary Game</em></h2>
+            <p class="body-lg">The CFL pumping lemma proof mirrors the RL version but with a twist — two segments are pumped simultaneously, reflecting the left/right branches of a parse tree.</p>
+        </div>
+        <div class="proof-steps">
+            <div class="step cfl-step">
+                <div class="step-num">①</div>
+                <div class="step-content">
+                    <div class="step-actor adversary">ADVERSARY speaks</div>
+                    <p>Assumes the language is context-free. Provides pumping length <em>p</em> (tied to the grammar's variable count).</p>
+                </div>
+            </div>
+            <div class="step cfl-step">
+                <div class="step-num">②</div>
+                <div class="step-content">
+                    <div class="step-actor prover">YOU respond</div>
+                    <p>Choose a string <code>s ∈ L</code> with <code>|s| ≥ p</code>. Classic: <code>aᵖbᵖcᵖ</code> (three-way balance).</p>
+                </div>
+            </div>
+            <div class="step cfl-step">
+                <div class="step-num">③</div>
+                <div class="step-content">
+                    <div class="step-actor adversary">ADVERSARY speaks</div>
+                    <p>Partitions <code>s = uvxyz</code> with <code>|vxy| ≤ p</code> and <code>|vy| > 0</code>. Since |vxy| ≤ p, v and y can touch <strong>at most 2</strong> of the 3 symbol blocks.</p>
+                </div>
+            </div>
+            <div class="step cfl-step">
+                <div class="step-num">④</div>
+                <div class="step-content">
+                    <div class="step-actor prover">YOU win</div>
+                    <p>Pump <code>i = 2</code>. Since v and y can't span all three symbols, pumping increases only 1 or 2 counts — the <strong>three-way balance is destroyed</strong>. Not in L. <strong>Contradiction. Q.E.D.</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CFL EXAMPLES ─── -->
+    <section class="section-cfl-examples">
+        <div class="cfl-pill-tag">EXAMPLES</div>
+        <h2 class="cfl-display-h2">Who breaks<br><em>the PDA?</em></h2>
+        <div class="eg-list">
+            <div class="eg-row">
+                <div class="eg-lang">L₁ = { aⁿbⁿcⁿ | n≥0 }</div>
+                <div class="eg-verdict cfl-eg-verdict not-cf">NOT CF</div>
+                <div class="eg-reason">Pumping can only affect 2 of 3 symbol types. The three-way balance is always broken.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₂ = { ww | w ∈ {a,b}* }</div>
+                <div class="eg-verdict cfl-eg-verdict not-cf">NOT CF</div>
+                <div class="eg-reason">Pumping destroys the exact-copy structure. The two halves can never match after pumping.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₃ = { aⁿbⁿ | n≥0 }</div>
+                <div class="eg-verdict cfl-eg-verdict is-cf">CONTEXT-FREE</div>
+                <div class="eg-reason">A PDA with a stack can count a's vs b's. CFG: S → aSb | ε. Passes the pumping lemma.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₄ = { aⁿbⁿcⁿdⁿ | n≥0 }</div>
+                <div class="eg-verdict cfl-eg-verdict not-cf">NOT CF</div>
+                <div class="eg-reason">Even harder than aⁿbⁿcⁿ. Four-way balance is impossible to maintain under pumping.</div>
+            </div>
+            <div class="eg-row">
+                <div class="eg-lang">L₅ = { a<sup>n²</sup> | n≥0 }</div>
+                <div class="eg-verdict cfl-eg-verdict not-cf">NOT CF</div>
+                <div class="eg-reason">Pumping adds a linear amount to a quadratic-length string, escaping perfect square lengths.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CFL CTA ─── -->
+    <section class="section-cfl-cta">
+        <p class="cta-overline" style="color:var(--cfl-accent);">CFL PUMPING LEMMA SIMULATOR</p>
+        <h2 class="cta-heading">Watch the parse tree<br><em style="color:var(--cfl-accent);">collapse.</em></h2>
+        <a href="cfl-simulator.html" class="cfl-cta-btn">ENTER CFL SIMULATOR</a>
+        <p class="cta-note">Interact with a live CFL pumping visualisation of L = { aⁿbⁿcⁿ }</p>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        <div class="footer-left">PL—CORE // THEORY OF COMPUTATION</div>
+        <div class="footer-right">PROTOCOL 002 · PUMPING LEMMA RL + CFL · v3.0</div>
+    </footer>
+
+    <!-- CDN: Three.js, GSAP, Lenis -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="./src/main.js" defer></script>
+</body>
+</html>
