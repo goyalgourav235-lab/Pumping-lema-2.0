@@ -81,31 +81,25 @@ Visualize parse tree structures collapse under pumping.
 │   ├── sim.js         # RL simulator logic
 │   ├── cfl-sim.js     # CFL simulator logic
 │   └── index.css      # Styling
-└── vite.config.js     # Vite bundler config
 ```
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Frontend:** HTML5, CSS3, JavaScript (ES6+)
-- **Build Tool:** Vite
-- **Deployment:** Vercel
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript (ES6+)
+- **Libraries used via CDN:** GSAP, Three.js, Lenis Smooth Scroll
+- **Architecture:** Zero-build static site
 
 ---
 
 ## ⚡ Quick Start
 
-```bash
-# Install dependencies
-npm install
+Since this project requires no build tools or package managers:
 
-# Run dev server
-npm run dev
-
-# Build for production
-npm run build
-```
+1. Clone or download the repository
+2. Open `index.html` directly in any modern web browser
+3. (Optional) Serve via any simple local web server like Live Server (VS Code) or Python's `http.server`.
 
 ---
 
